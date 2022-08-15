@@ -74,13 +74,13 @@ def RSA(encryption=True):
         # **************************Encryption**************************
         # 1 - Acquire the name and get M and K from the file. Handle errors with a try, except segment
         print("Please type in the name of the file with k and m.")
-        FileName = input("Type publickey.txt if need to use the default :\n")
+        FileName = input("The default to type is publickey.txt:\n")
         try:
             with open(FileName) as File:
                 S = File.readlines()
         except IOError:
             print("That File does not exist")
-            return
+            return False
 
         Test = [Line for Line in S if '#' not in Line and Line != "\n"]
         M = Test[0]
@@ -89,13 +89,13 @@ def RSA(encryption=True):
 
         # Ask to receive the Text to be encrypted
         print("\nPlease type in the name of the file to encrypt.")
-        TextName = input("Type plaintext.txt if you need to default\n")
+        TextName = input("The default to type is plaintext.txt:\n")
         try:
             with open(TextName) as File:
                 S = File.read()
         except IOError:
             print("That File does not exist")
-            return
+            return False
 
         # The Actual Encryption.
         print(S)
@@ -123,26 +123,28 @@ def RSA(encryption=True):
         EncryptedText = [power_mod_m(C, int(K), int(M)) for C in Encryption]
 
         # Ask where to store the encrypted message
-        FileName = input("\n\n\nWhere would you like to store this Cipher?\nThe default name is cipher.txt\n")
+        FileName = input("\n\n\nWhere would you like to store this Cipher?\nThe default to type is cipher.txt:\n")
 
         with open(FileName, "w+") as File:
             for Line in range(0, len(EncryptedText)):
                 File.write(str(EncryptedText[Line]) + "\n")
+            # Signifies that it has been encrypted
+            print("Your Message has been Encrypted")
+            return True
 
-        # Signifies that it has been encrypted
-        print("Your Message has been Encrypted")
-        return
+        return False
+
     # **************************Decryption*************************** #
     else:
         # Ask for a file name to get M, Phi(m), and K
         print("Please type in the name of the file with the public, private, and Auxiliary keys M, Phi(M), k.")
-        FileName = input("Type the default privatekey.txt if there is no additional file:\n")
+        FileName = input("The default to type is privatekey.txt:\n")
         try:
             with open(FileName) as File:
                 S = File.readlines()
         except IOError:
             print("That File does not exist")
-            return
+            return False
 
         # Interpret the File
         Test = [Line for Line in S if '#' not in Line and Line != "\n"]
@@ -154,13 +156,13 @@ def RSA(encryption=True):
 
         # Ask for a file to Decrypt
         print("\nPlease type in the name of the file to Decrypt.")
-        TextName = input("Type cipher.txt if you need to default:\n")
+        TextName = input("The default to type is cipher.txt:\n")
         try:
             with open(TextName) as File:
                 EncryptedText = File.readlines()
         except IOError:
             print("That File does not exist")
-            return
+            return False
 
         # The actual Decryption
 
@@ -199,10 +201,14 @@ def RSA(encryption=True):
         print(Text)
 
         # Store the Decoded message in a given file
-        FileName = input("\n\n\nWhere Would you like to store this?\nplaintext.txt is the default option.\n")
+        print("\n==================================")
+        print("Where Would you like to store this?")
+        FileName = input("The default to type is plaintext2.txt:\n")
         with open(FileName, "w+") as File:
             File.write(Text)
             print("The code has been successfully decoded")
+            return True
+        return False
 
     
 # Main
